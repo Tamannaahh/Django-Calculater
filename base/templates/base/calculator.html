@@ -1,0 +1,141 @@
+{% load static %}
+<html>
+<head>
+    <title>Django Calculator</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+</head>
+<body>
+    <div class="calculator">
+        <h1>Django Calculator</h1>
+
+        <form action="{% url 'calculate' %}" method="POST">
+            {% csrf_token %}
+            <input type="text" id="display" name="display" readonly value="{{ result }}">
+
+            <div class="buttons">
+                <button type="button" onclick="appendNumber('7')">7</button>
+                <button type="button" onclick="appendNumber('8')">8</button>
+                <button type="button" onclick="appendNumber('9')">9</button>
+                <button type="button" onclick="setOperation('divide')">÷</button>
+
+                <button type="button" onclick="appendNumber('4')">4</button>
+                <button type="button" onclick="appendNumber('5')">5</button>
+                <button type="button" onclick="appendNumber('6')">6</button>
+                <button type="button" onclick="setOperation('multiply')">×</button>
+
+                <button type="button" onclick="appendNumber('1')">1</button>
+                <button type="button" onclick="appendNumber('2')">2</button>
+                <button type="button" onclick="appendNumber('3')">3</button>
+                <button type="button" onclick="setOperation('subtract')">−</button>
+
+                <button type="button" onclick="appendNumber('0')">0</button>
+                <button type="button" onclick="clearDisplay()">C</button>
+                <button type="submit">=</button>
+                <button type="button" onclick="setOperation('add')">+</button>
+            </div>
+
+            <input type="hidden" id="number_one" name="number_one">
+            <input type="hidden" id="number_two" name="number_two">
+            <input type="hidden" id="operation" name="operation">
+        </form>
+    </div>
+
+    <script>
+        let displayValue = "";
+        let firstNumber = "";
+        let operation = "";
+        let secondNumberStarted = false;
+
+        function appendNumber(num) {
+            if (secondNumberStarted) {
+                displayValue += num;
+            } else {
+                displayValue += num;
+            }
+            document.getElementById("display").value = displayValue;
+        }
+
+        function setOperation(op) {
+            if (displayValue === "" || operation !== "") return; // Prevent setting multiple operations
+            firstNumber = displayValue;
+            operation = op;
+            displayValue += " " + getSymbol(op) + " "; // Show operator in display
+            secondNumberStarted = true;
+            document.getElementById("display").value = displayValue;
+        }
+
+        function getSymbol(op) {
+            switch (op) {
+                case 'add': return '+';
+                case 'subtract': return '−';
+                case 'multiply': return '×';
+                case 'divide': return '÷';
+                default: return '';
+            }
+        }
+
+        function clearDisplay() {
+            displayValue = "";
+            firstNumber = "";
+            operation = "";
+            secondNumberStarted = false;
+            document.getElementById("display").value = "";
+        }
+
+        document.querySelector("form").addEventListener("submit", function () {
+            let parts = displayValue.split(" ");
+            if (parts.length === 3) {
+                document.getElementById("number_one").value = parts[0];
+                document.getElementById("number_two").value = parts[2];
+                document.getElementById("operation").value = operation;
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+{% comment %} {% load static %}
+<html>
+    <head>
+        <title>Django Calculator</title>
+        <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
+    </head>
+
+    <body>
+        <section class="Calculator">
+            <h1>Django Calculator App</h1>
+
+            <form action="{% url 'calculate' %}" method="POST">
+                {% csrf_token %}
+
+                <label for="number_one">First Number</label>
+                <input type="number" placeholder="First Number" name="number_one" required>
+
+                <label for="number_two">Second Number</label>
+                <input type="number" placeholder="Second Number" name="number_two" required>
+
+                <label for="operation">Operation</label>
+                <select name="operation"> 
+                    <option value="add">Add</option>
+                    <option value="subtract">Subtract</option>
+                    <option value="multiply">Multiply</option>
+                    <option value="divide">Divide</option>
+                </select>
+
+                <br>
+
+                <input type="submit" value="Calculate" id="calc_btn" class="btn">
+
+                <h3>The result is: {{ result }}</h3>
+            </form>
+        </section>
+    </body>
+</html> {% endcomment %}
