@@ -96,4 +96,4 @@ For suggestions or improvements, feel free to [open an issue](https://github.com
 
 ---
 
-### Made with ❤️ using Django
+### Made with ❤️ by tamannah using Django
